@@ -16,6 +16,27 @@
 
 package com.google.common.math;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import static java.math.RoundingMode.CEILING;
+import static java.math.RoundingMode.DOWN;
+import static java.math.RoundingMode.FLOOR;
+import static java.math.RoundingMode.HALF_DOWN;
+import static java.math.RoundingMode.HALF_EVEN;
+import static java.math.RoundingMode.HALF_UP;
+import static java.math.RoundingMode.UNNECESSARY;
+import static java.math.RoundingMode.UP;
+import java.util.Arrays;
+import static java.util.Arrays.asList;
+
+import org.jspecify.annotations.NullUnmarked;
+
+import com.google.common.annotations.GwtCompatible;
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.math.MathTesting.ALL_DOUBLE_CANDIDATES;
@@ -29,30 +50,11 @@ import static com.google.common.math.MathTesting.INTEGRAL_DOUBLE_CANDIDATES;
 import static com.google.common.math.MathTesting.NEGATIVE_INTEGER_CANDIDATES;
 import static com.google.common.math.MathTesting.POSITIVE_FINITE_DOUBLE_CANDIDATES;
 import static com.google.common.math.ReflectionFreeAssertThrows.assertThrows;
-import static com.google.common.truth.Truth.assertThat;
-import static java.math.RoundingMode.CEILING;
-import static java.math.RoundingMode.DOWN;
-import static java.math.RoundingMode.FLOOR;
-import static java.math.RoundingMode.HALF_DOWN;
-import static java.math.RoundingMode.HALF_EVEN;
-import static java.math.RoundingMode.HALF_UP;
-import static java.math.RoundingMode.UNNECESSARY;
-import static java.math.RoundingMode.UP;
-import static java.util.Arrays.asList;
-
-import com.google.common.annotations.GwtCompatible;
-import com.google.common.annotations.GwtIncompatible;
-import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.primitives.Doubles;
 import com.google.common.testing.NullPointerTester;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.util.Arrays;
+import static com.google.common.truth.Truth.assertThat;
+
 import junit.framework.TestCase;
-import org.jspecify.annotations.NullUnmarked;
 
 /**
  * Tests for {@code DoubleMath}.
@@ -749,5 +751,11 @@ public class DoubleMathTest extends TestCase {
     NullPointerTester tester = new NullPointerTester();
     tester.setDefault(double.class, 3.0);
     tester.testAllPublicStaticMethods(DoubleMath.class);
+  }
+
+  public void testLog2Part() {
+    assertEquals(Math.log(-4.5) / Math.log(2), DoubleMath.log2(-4.5));
+    assertEquals(Math.log(0) / Math.log(2), DoubleMath.log2(0));
+    assertEquals(Math.log(3.1415) / Math.log(2), DoubleMath.log2(3.1415), 0.00001);
   }
 }

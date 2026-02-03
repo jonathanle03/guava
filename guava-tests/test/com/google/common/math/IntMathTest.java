@@ -16,6 +16,21 @@
 
 package com.google.common.math;
 
+import static java.lang.Math.min;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import static java.math.BigInteger.valueOf;
+import java.math.RoundingMode;
+import static java.math.RoundingMode.DOWN;
+import static java.math.RoundingMode.FLOOR;
+import static java.math.RoundingMode.UNNECESSARY;
+import java.util.Random;
+
+import org.jspecify.annotations.NullUnmarked;
+
+import com.google.common.annotations.GwtCompatible;
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import static com.google.common.math.MathTesting.ALL_INTEGER_CANDIDATES;
 import static com.google.common.math.MathTesting.ALL_ROUNDING_MODES;
 import static com.google.common.math.MathTesting.ALL_SAFE_ROUNDING_MODES;
@@ -25,22 +40,9 @@ import static com.google.common.math.MathTesting.NONZERO_INTEGER_CANDIDATES;
 import static com.google.common.math.MathTesting.POSITIVE_INTEGER_CANDIDATES;
 import static com.google.common.math.ReflectionFreeAssertThrows.assertThrows;
 import static com.google.common.math.TestPlatform.intsCanGoOutOfRange;
-import static java.lang.Math.min;
-import static java.math.BigInteger.valueOf;
-import static java.math.RoundingMode.DOWN;
-import static java.math.RoundingMode.FLOOR;
-import static java.math.RoundingMode.UNNECESSARY;
-
-import com.google.common.annotations.GwtCompatible;
-import com.google.common.annotations.GwtIncompatible;
-import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.testing.NullPointerTester;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.util.Random;
+
 import junit.framework.TestCase;
-import org.jspecify.annotations.NullUnmarked;
 
 /**
  * Tests for {@link IntMath}.
@@ -713,5 +715,17 @@ public class IntMathTest extends TestCase {
   private static int force32(int value) {
     // GWT doesn't consistently overflow values to make them 32-bit, so we need to force it.
     return value & 0xffffffff;
+  }
+
+  public void testPowPart() {
+    assertThrows(IllegalArgumentException.class, () -> IntMath.pow(-3, -4));
+    assertEquals(1, IntMath.pow(-3, 0));
+    assertEquals(-2187, IntMath.pow(-3, 7));
+    assertThrows(IllegalArgumentException.class, () -> IntMath.pow(0, -4));
+    assertEquals(1, IntMath.pow(0, 0)); // Yeah don't ask
+    assertEquals(0, IntMath.pow(0, 7));
+    assertThrows(IllegalArgumentException.class, () -> IntMath.pow(5, -4));
+    assertEquals(1, IntMath.pow(5, 0));
+    assertEquals(78125, IntMath.pow(5, 7));
   }
 }
