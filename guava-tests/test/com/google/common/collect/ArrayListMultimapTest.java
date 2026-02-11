@@ -16,26 +16,29 @@
 
 package com.google.common.collect;
 
-import static com.google.common.collect.ReflectionFreeAssertThrows.assertThrows;
-import static com.google.common.truth.Truth.assertThat;
+import java.util.ArrayList;
 import static java.util.Arrays.asList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.RandomAccess;
+
+import org.jspecify.annotations.NullMarked;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
+import static com.google.common.collect.ReflectionFreeAssertThrows.assertThrows;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.collect.testing.google.ListMultimapTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestStringListMultimapGenerator;
-import java.util.ConcurrentModificationException;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.RandomAccess;
+import static com.google.common.truth.Truth.assertThat;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.jspecify.annotations.NullMarked;
 
 /**
  * Unit tests for {@code ArrayListMultimap}.
@@ -171,5 +174,61 @@ public class ArrayListMultimapTest extends TestCase {
     assertEquals(3, multimap.size());
     assertThat(multimap.get("foo")).containsExactly(1, 2).inOrder();
     assertThat(multimap.get("bar")).contains(3);
+  }
+
+  public void testFSMRemoveOriginalKey() {
+    ArrayListMultimap<String, Integer> multimap = ArrayListMultimap.create();
+    assertTrue(multimap.isEmpty());
+
+    multimap.put("k1", 11);
+    multimap.put("k1", 12);
+
+    ArrayList arr = new ArrayList<Integer>();
+    arr.add(21);
+    arr.add(22);
+    multimap.putAll("k2", arr);
+
+    assertEquals(2, multimap.keySet().size());
+    assertEquals(4, multimap.size());
+
+    assertTrue(multimap.get("k1").contains(11));
+    assertTrue(multimap.get("k1").contains(12));
+    assertTrue(multimap.get("k2").contains(21));
+    assertTrue(multimap.get("k2").contains(22));
+
+    multimap.removeAll("k1");
+
+    assertEquals(1, multimap.keySet().size());
+    assertEquals(2, multimap.size());
+    assertTrue(multimap.containsKey("k2"));
+
+    multimap.remove("k3", 31);
+
+    assertEquals(1, multimap.keySet().size());
+    assertEquals(2, multimap.size());
+    assertTrue(multimap.containsKey("k2"));
+
+    multimap.clear();
+    assertTrue(multimap.isEmpty());
+  }
+
+  public void testFSMRemoveFirstValues() {
+    ArrayListMultimap<String, Integer> multimap = ArrayListMultimap.create();
+
+    ArrayList arr1 = new ArrayList<Integer>();
+    arr1.add(11);
+    arr1.add(12);
+    multimap.putAll("k1", arr1);
+
+    ArrayList arr2 = new ArrayList<Integer>();
+    arr2.add(21);
+    arr2.add(22);
+    multimap.putAll("k2", arr2);
+
+    multimap.remove("k1", 11);
+    multimap.remove("k2", 21);
+
+    assertEquals(2, multimap.keySet().size());
+    assertEquals(2, multimap.size());
   }
 }
