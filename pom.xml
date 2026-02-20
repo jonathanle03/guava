@@ -232,6 +232,8 @@
               <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
               <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
               <arg>-Xlint:-removal,-options</arg>
+              <arg>--add-exports</arg>
+              <arg>java.base/sun.security.jca=ALL-UNNAMED</arg>
             </compilerArgs>
             <annotationProcessorPaths>
               <path>

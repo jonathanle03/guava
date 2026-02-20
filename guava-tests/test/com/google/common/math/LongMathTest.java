@@ -943,4 +943,36 @@ public class LongMathTest extends TestCase {
   private static void failFormat(String template, Object... args) {
     assertWithMessage(template, args).fail();
   }
+
+  public void testPowPart() {
+    assertThrows(IllegalArgumentException.class, () -> LongMath.pow(-3, -4));
+    assertEquals(1, LongMath.pow(-3, 0));
+    assertEquals(-2187, LongMath.pow(-3, 7));
+    assertThrows(IllegalArgumentException.class, () -> LongMath.pow(0, -4));
+    assertEquals(1, LongMath.pow(0, 0)); // Strange logic
+    assertEquals(0, LongMath.pow(0, 7));
+    assertThrows(IllegalArgumentException.class, () -> LongMath.pow(5, -4));
+    assertEquals(1, LongMath.pow(5, 0));
+    assertEquals(78125, LongMath.pow(5, 7));
+  }
+
+  public void testGcd() {
+    assertEquals(0, LongMath.gcd(0, 0));
+    assertEquals(25, LongMath.gcd(25, 0));
+    assertEquals(100, LongMath.gcd(0, 100));
+    assertEquals(25, LongMath.gcd(25, 100));
+    assertEquals(1, LongMath.gcd(17, 100));
+    assertEquals(5, LongMath.gcd(15, 155));
+  }
+
+  public void testLongBinomial() {
+    assertEquals(1, LongMath.binomial(0, 0));
+    assertEquals(1, LongMath.binomial(10, 0));
+    assertEquals(10, LongMath.binomial(10, 1));
+    assertEquals(10, LongMath.binomial(10, 1));
+    assertEquals(252, LongMath.binomial(10, 5));
+    assertEquals(Long.MAX_VALUE, LongMath.binomial(Integer.MAX_VALUE, 5));
+    assertTrue(LongMath.binomial(10000, 5) < Long.MAX_VALUE);
+    assertTrue(LongMath.binomial(15000, 5) < Long.MAX_VALUE);
+  }
 }

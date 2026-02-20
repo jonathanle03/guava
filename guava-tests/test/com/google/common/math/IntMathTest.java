@@ -722,7 +722,7 @@ public class IntMathTest extends TestCase {
     assertEquals(1, IntMath.pow(-3, 0));
     assertEquals(-2187, IntMath.pow(-3, 7));
     assertThrows(IllegalArgumentException.class, () -> IntMath.pow(0, -4));
-    assertEquals(1, IntMath.pow(0, 0)); // Yeah don't ask
+    assertEquals(1, IntMath.pow(0, 0)); // Strange logic
     assertEquals(0, IntMath.pow(0, 7));
     assertThrows(IllegalArgumentException.class, () -> IntMath.pow(5, -4));
     assertEquals(1, IntMath.pow(5, 0));
