@@ -54,7 +54,20 @@ jobs:
         run: ./mvnw -B -ntp -Dtoolchain.skip install -U -DskipTests=true -f $ROOT_POM
       - name: 'Test'
         shell: bash
-        run: ./mvnw -B -ntp -P!standard-with-extra-repos -Dtoolchain.skip verify -U -Dmaven.javadoc.skip=true -Dsurefire.toolchain.version=${{ matrix.java }} -f $ROOT_POM
+        run: |
+          EXTRA=""
+          if [ "${{ matrix.java }}" != "8" ]; then
+            EXTRA='-Dsurefire.argLine=--add-exports=java.base/sun.security.jca=ALL-UNNAMED'
+          fi
+
+          ./mvnw -B -ntp \
+            -P!standard-with-extra-repos \
+            -Dtoolchain.skip \
+            verify -U \
+            -Dmaven.javadoc.skip=true \
+            -Dsurefire.toolchain.version=${{ matrix.java }} \
+            $EXTRA \
+            -f $ROOT_POM
       - name: 'Print Surefire reports'
         # Note: Normally a step won't run if the job has failed, but this causes it to
         if: ${{ failure() }}
