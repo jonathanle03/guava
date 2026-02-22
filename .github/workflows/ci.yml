@@ -51,7 +51,7 @@ jobs:
           cache: 'maven'
       - name: 'Install'
         shell: bash
-        run: ./mvnw -B -ntp -Dtoolchain.skip install -U -DskipTests=true -f $ROOT_POM
+        run: ./mvnw -B -ntp install -U -DskipTests=true -f $ROOT_POM
       - name: 'Test'
         shell: bash
         run: |
@@ -62,7 +62,6 @@ jobs:
 
           ./mvnw -B -ntp \
             -P!standard-with-extra-repos \
-            -Dtoolchain.skip \
             verify -U \
             -Dmaven.javadoc.skip=true \
             -Dsurefire.toolchain.version=${{ matrix.java }} \
