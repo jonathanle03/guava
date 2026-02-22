@@ -55,17 +55,11 @@ jobs:
       - name: 'Test'
         shell: bash
         run: |
-          EXTRA=""
-          if [ "${{ matrix.java }}" != "8" ]; then
-            EXTRA='-Dmaven.compiler.testCompilerArgs=--add-exports=java.base/sun.security.jca=ALL-UNNAMED'
-          fi
-
           ./mvnw -B -ntp \
             -P!standard-with-extra-repos \
             verify -U \
             -Dmaven.javadoc.skip=true \
             -Dsurefire.toolchain.version=${{ matrix.java }} \
-            $EXTRA \
             -f $ROOT_POM
       - name: 'Print Surefire reports'
         # Note: Normally a step won't run if the job has failed, but this causes it to
