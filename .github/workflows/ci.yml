@@ -57,7 +57,7 @@ jobs:
         run: |
           EXTRA=""
           if [ "${{ matrix.java }}" != "8" ]; then
-            EXTRA='-Dsurefire.argLine=--add-exports=java.base/sun.security.jca=ALL-UNNAMED'
+            EXTRA='-Dmaven.compiler.testCompilerArgs=--add-exports=java.base/sun.security.jca=ALL-UNNAMED'
           fi
 
           ./mvnw -B -ntp \
