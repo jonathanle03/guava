@@ -618,23 +618,30 @@
       </build>
     </profile>
     <profile>
-      <id>java9plus</id>
+      <id>add-exports-for-test-compile-java9plus</id>
       <activation>
         <jdk>[9,)</jdk>
       </activation>
       <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <argLine>
-                --add-exports java.base/sun.security.jca=ALL-UNNAMED
-                --add-opens java.base/sun.security.jca=ALL-UNNAMED
-              </argLine>
-            </configuration>
-          </plugin>
-        </plugins>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>default-testCompile</id>
+                  <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                    <compilerArgs combine.children="append">
+                      <arg>--add-exports=java.base/sun.security.jca=ALL-UNNAMED</arg>
+                    </compilerArgs>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
       </build>
     </profile>
   </profiles>
