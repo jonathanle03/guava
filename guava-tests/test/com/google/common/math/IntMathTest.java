@@ -717,7 +717,7 @@ public class IntMathTest extends TestCase {
     return value & 0xffffffff;
   }
 
-  public void testPowPart() {
+  public void testPowPartition() {
     assertThrows(IllegalArgumentException.class, () -> IntMath.pow(-3, -4));
     assertEquals(1, IntMath.pow(-3, 0));
     assertEquals(-2187, IntMath.pow(-3, 7));
@@ -727,5 +727,13 @@ public class IntMathTest extends TestCase {
     assertThrows(IllegalArgumentException.class, () -> IntMath.pow(5, -4));
     assertEquals(1, IntMath.pow(5, 0));
     assertEquals(78125, IntMath.pow(5, 7));
+  }
+
+  public void testMeanPartition() {
+    assertEquals(5, IntMath.mean(3, 7));
+    assertEquals(5, IntMath.mean(3, 8));
+    assertEquals(-5, IntMath.mean(-3, -7));
+    assertEquals(-5, IntMath.mean(-3, -6));
+    assertEquals(Integer.MAX_VALUE / 2, IntMath.mean(Integer.MAX_VALUE, 0));
   }
 }
