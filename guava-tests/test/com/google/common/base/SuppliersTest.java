@@ -22,6 +22,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.mockito.Mockito.*;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -534,5 +535,15 @@ public class SuppliersTest extends TestCase {
   public void testFakeIntSupplier() {
     Supplier<Integer> supplier = new FakeIntSupplier();
     assertEquals(14, (int) supplier.get());
+  }
+
+  public void testMockIntSupplier() {
+    Supplier<Integer> mockService = mock(Supplier.class);
+    when(mockService.get()).thenReturn(14);
+
+    Function<Supplier<Integer>, Integer> supplierFunction = Suppliers.supplierFunction();
+
+    assertEquals(14, (int) supplierFunction.apply(mockService));
+    verify(mockService, times(1)).get();
   }
 }
