@@ -29,6 +29,7 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.Lists;
 import com.google.common.testing.ClassSanityTester;
 import com.google.common.testing.EqualsTester;
+import com.google.common.testing.FakeIntSupplier;
 import java.io.NotSerializableException;
 import java.io.Serializable;
 import java.time.Duration;
@@ -528,5 +529,10 @@ public class SuppliersTest extends TestCase {
         .addEqualityGroup(Suppliers.compose(Functions.constant(2), Suppliers.ofInstance("foo")))
         .addEqualityGroup(Suppliers.compose(Functions.constant(1), Suppliers.ofInstance("bar")))
         .testEquals();
+  }
+
+  public void testFakeIntSupplier() {
+    Supplier<Integer> supplier = new FakeIntSupplier();
+    assertEquals(14, (int) supplier.get());
   }
 }
