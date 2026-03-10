@@ -484,6 +484,17 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>4.8.6.4</version>
+          <configuration>
+            <effort>Max</effort>
+            <threshold>Low</threshold>
+            <xmlOutput>true</xmlOutput>
+            <htmlOutput>true</htmlOutput>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
